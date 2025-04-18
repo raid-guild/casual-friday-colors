@@ -9,13 +9,37 @@ const chivo = Chivo({
   subsets: ["latin"],
   display: "swap",
   weight: ["300", "400", "700"],
-  variable: "--font-chivo",
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
-  title: "Color Website",
-  description: "A website where you can select and buy colors",
-  generator: "v0.dev",
+  title: "Raid Colors",
+  description:
+    "A Decentralized Collective of Colors Ready to Slay Your Web3 Product Demons.",
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    other: [
+      {
+        rel: "mask-icon",
+        url: "/safari-pinned-tab.svg",
+        color: "#5bbad5",
+      },
+    ],
+  },
+  themeColor: "#ffffff",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Create Next App",
+  },
 };
 
 export default function RootLayout({
@@ -25,7 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${chivo.variable} font-sans`}>
+      <body className={`${chivo.variable}`}>
         <Providers>{children}</Providers>
       </body>
     </html>

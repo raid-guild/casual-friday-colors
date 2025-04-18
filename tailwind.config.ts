@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   darkMode: ["class"],
@@ -11,6 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        raid: "#FF3864",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -62,7 +63,7 @@ const config: Config = {
           ring: "hsl(var(--sidebar-ring))",
         },
         fontFamily: {
-          sans: ["var(--font-chivo)"],
+          sans: ["var(--font-sans)"],
         },
       },
       borderRadius: {
@@ -95,5 +96,5 @@ const config: Config = {
     },
   },
   plugins: [],
-}
-export default config
+};
+export default config;
