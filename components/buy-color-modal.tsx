@@ -2,9 +2,8 @@
 
 import { X, ShoppingCart } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { MINT_PRICE } from "@/lib/constants";
+import { MINT_PRICE, TARGET_CHAIN } from "@/lib/constants";
 import { formatEther } from "viem";
-import { base } from "wagmi/chains";
 
 interface BuyColorModalProps {
   color: string;
@@ -23,7 +22,7 @@ export default function BuyColorModal({
   isLoading,
   chainId,
 }: BuyColorModalProps) {
-  const isOnBase = chainId === base.id;
+  const isOnBase = chainId === TARGET_CHAIN.id;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState, useEffect } from "react";
-import { History } from "lucide-react";
+import { History, Palette } from "lucide-react";
 import Image from "next/image";
 import {
   useAccount,
@@ -13,14 +13,13 @@ import {
   useEnsName,
   useSwitchChain,
 } from "wagmi";
-import { base } from "wagmi/chains";
 import ColorHistoryModal from "@/components/color-history-modal";
 import BuyColorModal from "@/components/buy-color-modal";
 import SuccessModal from "@/components/success-modal";
 import AddressDisplay from "@/components/address-display";
 
 import tokenAbi from "@/lib/abis/token.json";
-import { CONTRACT_ADDRESS, MINT_PRICE } from "@/lib/constants";
+import { CONTRACT_ADDRESS, MINT_PRICE, TARGET_CHAIN } from "@/lib/constants";
 
 // Type for our color history entries
 type ColorHistoryEntry = {
@@ -143,8 +142,8 @@ export default function Home() {
 
   // Switch to Base chain when connected
   useEffect(() => {
-    if (isConnected && chain?.id !== base.id) {
-      switchChain({ chainId: base.id });
+    if (isConnected && chain?.id !== TARGET_CHAIN.id) {
+      switchChain({ chainId: TARGET_CHAIN.id });
     }
   }, [isConnected, chain?.id, switchChain]);
 
@@ -214,24 +213,28 @@ export default function Home() {
       {/* Footer with color picker */}
       <footer className="p-4 flex justify-between items-center bg-white/10 backdrop-blur-sm">
         <div className="flex items-center gap-3">
-          <label
-            htmlFor="colorPicker"
-            className="text-sm font-medium text-white"
-          >
-            Choose background color:
-          </label>
           <div className="relative">
             <input
               type="color"
               id="colorPicker"
               value={backgroundColor}
               onChange={handleColorChange}
-              className="w-10 h-10 rounded-[0.0625rem] cursor-pointer"
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               aria-label="Color picker"
               disabled={
                 isLoading || isConfirming || isLoadingSupply || isLoadingColor
               }
             />
+            <button
+              type="button"
+              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center"
+              onClick={() => document.getElementById("colorPicker")?.click()}
+              disabled={
+                isLoading || isConfirming || isLoadingSupply || isLoadingColor
+              }
+            >
+              <Palette className="w-5 h-5 text-white" />
+            </button>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-sm text-white">{backgroundColor}</span>

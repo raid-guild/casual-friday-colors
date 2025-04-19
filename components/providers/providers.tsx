@@ -7,14 +7,13 @@ import {
   midnightTheme,
 } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
-import { base, sepolia } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { TARGET_CHAIN } from "@/lib/constants";
 
 const config = getDefaultConfig({
   appName: "casual fridays",
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_ID || "",
-  chains: [base],
-  // chains: [sepolia],
+  chains: [TARGET_CHAIN],
 
   ssr: true, // If your dApp uses server side rendering (SSR)
 });
