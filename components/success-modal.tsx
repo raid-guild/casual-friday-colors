@@ -16,7 +16,7 @@ export default function SuccessModal({ onClose, color }: SuccessModalProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white shadow-lg w-full max-w-md mx-4 overflow-hidden rounded-[0.0625rem]">
+      <div className="bg-black shadow-lg w-full max-w-md mx-4 overflow-hidden rounded-[0.0625rem]">
         <div className="p-6 flex flex-col items-center">
           <div className="w-16 h-16 mb-4 relative">
             <Image
@@ -26,8 +26,8 @@ export default function SuccessModal({ onClose, color }: SuccessModalProps) {
               className="object-contain"
             />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Success!</h2>
-          <p className="text-gray-600 text-center mb-6">
+          <h2 className="text-2xl font-bold text-white mb-2">Success!</h2>
+          <p className="text-gray-400 text-center mb-6">
             Your Raid Color is now THE RAID COLOR!
           </p>
           <div className="flex gap-3">
@@ -40,7 +40,7 @@ export default function SuccessModal({ onClose, color }: SuccessModalProps) {
             </button>
             <button
               onClick={onClose}
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-sm hover:bg-gray-300 transition-colors"
+              className="px-4 py-2 bg-gray-800 text-white rounded-sm hover:bg-gray-700 transition-colors"
             >
               Close
             </button>

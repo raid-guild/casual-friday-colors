@@ -11,7 +11,9 @@ import {
   useReadContract,
   useWaitForTransactionReceipt,
   useEnsName,
+  useSwitchChain,
 } from "wagmi";
+import { base } from "wagmi/chains";
 import ColorHistoryModal from "@/components/color-history-modal";
 import BuyColorModal from "@/components/buy-color-modal";
 import SuccessModal from "@/components/success-modal";
@@ -28,7 +30,8 @@ type ColorHistoryEntry = {
 };
 
 export default function Home() {
-  const { isConnected, address } = useAccount();
+  const { isConnected, address, chain } = useAccount();
+  const { switchChain } = useSwitchChain();
   const {
     writeContract,
     data: hash,
@@ -137,6 +140,13 @@ export default function Home() {
     refetchColor,
     refetchOwner,
   ]);
+
+  // Switch to Base chain when connected
+  useEffect(() => {
+    if (isConnected && chain?.id !== base.id) {
+      switchChain({ chainId: base.id });
+    }
+  }, [isConnected, chain?.id, switchChain]);
 
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newColor = e.target.value;
@@ -265,6 +275,7 @@ export default function Home() {
           currentTokenId={
             totalSupply ? (totalSupply as bigint) - BigInt(1) : BigInt(0)
           }
+          currentColor={backgroundColor}
           onClose={toggleHistoryModal}
           onSelectColor={(color) => {
             setBackgroundColor(color);
@@ -281,6 +292,7 @@ export default function Home() {
           onCancel={handleCancelBuy}
           isConnected={isConnected}
           isLoading={isLoading || isConfirming}
+          chainId={chain?.id}
         />
       )}
 
