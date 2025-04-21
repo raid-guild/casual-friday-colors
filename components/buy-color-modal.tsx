@@ -2,8 +2,10 @@
 
 import { X, ShoppingCart } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { MINT_PRICE, TARGET_CHAIN } from "@/lib/constants";
+import { MINT_PRICE, TARGET_CHAIN, CONTRACT_ADDRESS } from "@/lib/constants";
 import { formatEther } from "viem";
+import { useReadContract } from "wagmi";
+import tokenAbi from "@/lib/abis/token.json";
 
 interface BuyColorModalProps {
   color: string;
@@ -23,6 +25,19 @@ export default function BuyColorModal({
   chainId,
 }: BuyColorModalProps) {
   const isOnBase = chainId === TARGET_CHAIN.id;
+
+  // Remove # from color if present for contract call
+  const colorHex = color.startsWith("#") ? color.slice(1) : color;
+
+  // Check if color is already minted
+  const { data: isColorMinted } = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: tokenAbi,
+    functionName: "isColorMinted",
+    args: [colorHex],
+  }) as { data: boolean | undefined };
+
+  const isDisabled = !isConnected || isLoading || !isOnBase || isColorMinted;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -80,6 +95,15 @@ export default function BuyColorModal({
             </div>
           )}
 
+          {isColorMinted && (
+            <div className="bg-red-900/20 border border-red-800 text-red-400 p-4 rounded-lg mb-6">
+              <p className="text-sm">
+                This color has already been minted! Please choose a different
+                color.
+              </p>
+            </div>
+          )}
+
           <p className="text-sm text-gray-400 mb-6">
             Raid Colors will display your color as long as it's the most
             recently minted!
@@ -96,7 +120,7 @@ export default function BuyColorModal({
           </button>
           <button
             onClick={onBuy}
-            disabled={!isConnected || isLoading || !isOnBase}
+            disabled={isDisabled}
             className="px-4 py-2 bg-raid text-white rounded-sm hover:bg-raid/90 transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ShoppingCart className="w-4 h-4 mr-2" />
