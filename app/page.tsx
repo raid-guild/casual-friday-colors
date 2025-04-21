@@ -28,6 +28,21 @@ type ColorHistoryEntry = {
   timestamp: number;
 };
 
+// Function to calculate relative luminance of a color
+const getLuminance = (hexColor: string) => {
+  // Remove the # if present
+  const hex = hexColor.replace("#", "");
+
+  // Convert hex to RGB
+  const r = parseInt(hex.substring(0, 2), 16) / 255;
+  const g = parseInt(hex.substring(2, 4), 16) / 255;
+  const b = parseInt(hex.substring(4, 6), 16) / 255;
+
+  // Calculate relative luminance
+  const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return luminance;
+};
+
 export default function Home() {
   const { isConnected, address, chain } = useAccount();
   const { switchChain } = useSwitchChain();
@@ -48,6 +63,7 @@ export default function Home() {
   const [colorHistory, setColorHistory] = useState<ColorHistoryEntry[]>([
     { color: "#3b82f6", owner: address, timestamp: Date.now() },
   ]);
+  const [useDarkText, setUseDarkText] = useState(false);
 
   // Wait for transaction receipt
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
@@ -147,6 +163,12 @@ export default function Home() {
     }
   }, [isConnected, chain?.id, switchChain]);
 
+  // Update text color based on background color
+  useEffect(() => {
+    const luminance = getLuminance(backgroundColor);
+    setUseDarkText(luminance > 0.5); // Use dark text if luminance is above 0.5
+  }, [backgroundColor]);
+
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newColor = e.target.value;
     setSelectedColor(newColor); // Store the selected color
@@ -233,12 +255,26 @@ export default function Home() {
                 isLoading || isConfirming || isLoadingSupply || isLoadingColor
               }
             >
-              <Palette className="w-5 h-5 text-white" />
+              <Palette
+                className={`w-5 h-5 ${
+                  useDarkText ? "text-black" : "text-white"
+                }`}
+              />
             </button>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-white">{backgroundColor}</span>
-            <span className="text-sm text-white opacity-80">picked by</span>
+            <span
+              className={`text-sm ${useDarkText ? "text-black" : "text-white"}`}
+            >
+              {backgroundColor}
+            </span>
+            <span
+              className={`text-sm ${
+                useDarkText ? "text-black/80" : "text-white/80"
+              }`}
+            >
+              picked by
+            </span>
             <AddressDisplay address={tokenOwner} />
           </div>
           <button
@@ -249,13 +285,21 @@ export default function Home() {
               isLoading || isConfirming || isLoadingSupply || isLoadingColor
             }
           >
-            <History className="w-5 h-5 text-white" />
+            <History
+              className={`w-5 h-5 ${useDarkText ? "text-black" : "text-white"}`}
+            />
           </button>
         </div>
 
         {/* Raid Guild Attribution */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-white font-medium">🖤</span>
+          <span
+            className={`text-xs ${
+              useDarkText ? "text-black" : "text-white"
+            } font-medium`}
+          >
+            🖤
+          </span>
           <a
             href="https://www.raidguild.org/"
             target="_blank"
