@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import { CONTRACT_ADDRESS } from "@/lib/constants";
 import { ImageResponse } from "next/og";
 import { createPublicClient, http } from "viem";
 import { base } from "viem/chains";

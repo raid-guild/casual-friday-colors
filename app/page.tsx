@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
     version: "next",
     imageUrl: `${appUrl}/opengraph-image`,
     button: {
-      title: "Pick a Color",
+      title: "Pick The Raid Color",
       action: {
         type: "launch_frame",
         name: "Raid Colors",
