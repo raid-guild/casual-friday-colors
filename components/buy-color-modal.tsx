@@ -4,8 +4,11 @@ import { X, ShoppingCart } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { MINT_PRICE, TARGET_CHAIN, CONTRACT_ADDRESS } from "@/lib/constants";
 import { formatEther } from "viem";
-import { useReadContract } from "wagmi";
+import { useConnect, useReadContract } from "wagmi";
 import tokenAbi from "@/lib/abis/token.json";
+import { useFrame } from "./providers/frame-provider";
+import { config } from "./providers/providers";
+import { Button } from "./ui/button";
 
 interface BuyColorModalProps {
   color: string;
@@ -25,6 +28,11 @@ export default function BuyColorModal({
   chainId,
 }: BuyColorModalProps) {
   const isOnBase = chainId === TARGET_CHAIN.id;
+
+  const { context } = useFrame();
+  const { connect } = useConnect();
+
+  console.log("context", context);
 
   // Remove # from color if present for contract call
   const colorHex = color.startsWith("#") ? color.slice(1) : color;
@@ -76,7 +84,22 @@ export default function BuyColorModal({
             </div>
           </div>
 
-          {!isConnected && (
+          {!isConnected && context && (
+            <div className="bg-yellow-900/20 border border-yellow-800 text-yellow-400 p-4 rounded-lg mb-6">
+              <p className="text-sm mb-4">
+                Please connect your Warpcaste wallet to purchase this color.
+              </p>
+              <div className="flex justify-center">
+                <Button
+                  onClick={() => connect({ connector: config.connectors[0] })}
+                >
+                  Connect Wallet
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {!isConnected && !context && (
             <div className="bg-yellow-900/20 border border-yellow-800 text-yellow-400 p-4 rounded-lg mb-6">
               <p className="text-sm mb-4">
                 Please connect your wallet to purchase this color.
