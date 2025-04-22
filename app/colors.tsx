@@ -275,16 +275,16 @@ export default function Colors() {
           </div>
           <div className="flex items-center gap-2">
             <span
-              className={`text-sm ${useDarkText ? "text-black" : "text-white"}`}
+              className={`text-xs ${useDarkText ? "text-black" : "text-white"}`}
             >
               {backgroundColor}
             </span>
             <span
-              className={`text-sm ${
+              className={`text-xs ${
                 useDarkText ? "text-black/80" : "text-white/80"
               }`}
             >
-              picked by
+              by
             </span>
             <AddressDisplay address={tokenOwner} />
           </div>
@@ -318,7 +318,7 @@ export default function Colors() {
 
           {context && (
             <button
-              onClick={toggleHistoryModal}
+              onClick={openCastUrl}
               className="ml-4 p-2 rounded-[0.0625rem] bg-white/10 hover:bg-white/20 transition-colors"
               aria-label="Share"
               disabled={
