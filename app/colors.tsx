@@ -3,7 +3,8 @@
 import type React from "react";
 
 import { useState, useEffect } from "react";
-import { History, Palette } from "lucide-react";
+import sdk from "@farcaster/frame-sdk";
+import { History, Palette, Share2 } from "lucide-react";
 import Image from "next/image";
 import {
   useAccount,
@@ -20,6 +21,7 @@ import AddressDisplay from "@/components/address-display";
 
 import tokenAbi from "@/lib/abis/token.json";
 import { CONTRACT_ADDRESS, MINT_PRICE, TARGET_CHAIN } from "@/lib/constants";
+import { useFrame } from "@/components/providers/frame-provider";
 
 // Type for our color history entries
 type ColorHistoryEntry = {
@@ -64,6 +66,8 @@ export default function Colors() {
     { color: "#3b82f6", owner: address, timestamp: Date.now() },
   ]);
   const [useDarkText, setUseDarkText] = useState(false);
+
+  const { context } = useFrame();
 
   // Wait for transaction receipt
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
@@ -213,6 +217,13 @@ export default function Colors() {
     setIsHistoryModalOpen(!isHistoryModalOpen);
   };
 
+  const openCastUrl = () => {
+    sdk.actions.composeCast({
+      text: "Who has the raid color?!?",
+      embeds: ["https://colors.raidguild.org"],
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor }}>
       {/* Loading overlay */}
@@ -289,6 +300,38 @@ export default function Colors() {
               className={`w-5 h-5 ${useDarkText ? "text-black" : "text-white"}`}
             />
           </button>
+
+          {!context && (
+            <a
+              href={`https://warpcast.com/~/compose?text=Who has the raid color%3F%21%3F%0A&embeds[]=https://colors.raidguild.org`}
+              target="_blank"
+              className="ml-4 p-2 rounded-[0.0625rem] bg-white/10 hover:bg-white/20 transition-colors"
+              aria-label="Share"
+            >
+              <Share2
+                className={`w-5 h-5 ${
+                  useDarkText ? "text-black" : "text-white"
+                }`}
+              />
+            </a>
+          )}
+
+          {context && (
+            <button
+              onClick={toggleHistoryModal}
+              className="ml-4 p-2 rounded-[0.0625rem] bg-white/10 hover:bg-white/20 transition-colors"
+              aria-label="Share"
+              disabled={
+                isLoading || isConfirming || isLoadingSupply || isLoadingColor
+              }
+            >
+              <Share2
+                className={`w-5 h-5 ${
+                  useDarkText ? "text-black" : "text-white"
+                }`}
+              />
+            </button>
+          )}
         </div>
 
         {/* Raid Guild Attribution */}

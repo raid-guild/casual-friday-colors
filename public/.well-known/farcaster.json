@@ -10,7 +10,7 @@
     "iconUrl": "https://colors.raidguild.org/trumpet.svg",
     "homeUrl": "https://colors.raidguild.org/",
     "imageUrl": "https://colors.raidguild.org/swords.svg",
-    "buttonTitle": "Pick a Color",
+    "buttonTitle": "Pick The Raid Color",
     "splashImageUrl": "https://colors.raidguild.org/swords.svg",
     "splashBackgroundColor": "#ff3864",
     "webhookUrl": "https://colors.raidguild.org/api/webhook"
